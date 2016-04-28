@@ -1,0 +1,66 @@
+/* CSS Document */
+body {
+	min-width: 320px;
+}
+
+.Hidden {
+	display: none;
+}
+
+.Visible {
+	display: inherit !important;
+}
+
+.contentRight {
+	text-align: right;
+}
+.contentLeft {
+	text-align: left;
+}
+.contentCenter {
+	text-align: center;
+}
+
+.containerRight {
+	float: right;
+}
+.containerLeft {
+	float: left;
+}
+
+.row.formRow .columns,
+.row.formRow {
+	margin-bottom: 1em;
+}
+
+.reveal-modal {
+	min-width: 320px;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="date"],
+input[type="datetime"],
+input[type="datetime-local"],
+input[type="month"],
+input[type="week"],
+input[type="email"],
+input[type="number"],
+input[type="search"],
+input[type="tel"],
+input[type="time"],
+input[type="url"],
+textarea {
+	margin: 0;
+}
+
+.buttonContainer .button {
+	margin: 0;
+}
+.buttonContainer {
+	display: inline-block;
+}
+
+.row {
+	margin: 10px auto;
+}

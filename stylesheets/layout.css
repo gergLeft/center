@@ -1,0 +1,56 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : Apr 14, 2016, 1:39:29 PM
+    Author     : gkrabach
+*/
+.expense-record {
+  background-color: #E381A2;
+  margin: 0 5px 10px;
+  border: 1px solid black;
+  height: 100px;
+  overflow: hidden;
+  padding: 5px;
+}
+
+.income-record {
+  background-color: #a1d490;
+  margin: 0 5px 10px;
+  border: 1px solid black;
+  height: 100px;
+  overflow: hidden;
+  padding: 5px;
+}
+
+.row.ledger_day {
+  border-top: 1px solid black;
+  border-bottom: 1px solid black;
+  padding: 5px 0px;
+}
+.row.ledger_day.alt {
+  background-color: lightgray;
+}
+.row.ledger_day .ledger_day_heading {
+  padding: 6px 0px 6px 5px;
+}
+
+.duplicate-trans{
+  background-color: #E381A2;
+  margin: 0 5px 10px;
+  border: 1px solid black;
+  height: 100px;
+  overflow: hidden;
+  padding: 5px;
+}
+
+.import-trans {
+  background-color: #a1d490;
+  margin: 0 5px 10px;
+  border: 1px solid black;
+  height: 100px;
+  overflow: hidden;
+  padding: 5px;
+}
