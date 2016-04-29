@@ -12,7 +12,10 @@
     <link href="/stylesheets/layout.css" media="screen, projector, print" rel="stylesheet" type="text/css" />
     <link href="/stylesheets/grid-5.css" media="screen, projector, print" rel="stylesheet" type="text/css" />
   	<link href="/stylesheets/pwStrength.css" rel="stylesheet" type="text/css" />
+    <!-- start cdn css-->
+    <link rel="stylesheet" href="/stylesheets/foundation-datepicker.css"><link href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
     <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/start/jquery-ui.css" />  
+    <!-- end cdn css-->
   	<!-- end standard css -->
     
     <!-- start page specific css -->

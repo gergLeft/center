@@ -6,6 +6,18 @@ class ledger_item {
   const EXPENSE = 'expense';
   const INCOME = 'income';
   
+  const STATUS_CLEARED = 'cleared';
+  const STATUS_PENDING = 'pending';
+  
+  const SCHEDULE_DAILY = 'daily';
+  const SCHEDULE_WEEKLY = 'weekly';
+  const SCHEDULE_BIWEEKLY = 'bi-weekly';
+  const SCHEDULE_SEMIMONTHLY = 'semi-monthly';
+  const SCHEDULE_MONTHLY = 'monthly';
+  const SCHEDULE_QUARTERLY = 'quarterly';
+  const SCHEDULE_SEMIANNUALLY = 'semi-annually';
+  const SCHEDULE_ANNUALLY = 'annually';
+  
   public $id;
   public $type = self::EXPENSE;
   public $category = 0;
@@ -13,6 +25,44 @@ class ledger_item {
   public $value = 0.00;
   public $date;
   public $time = "00:00:00";
+  public $status = self::STATUS_CLEARED;
+  public $recurring_set_id = false;
+  
+  public function create_recurring_ledger_item($pattern, $stopType, $stopVal) {
+    //pattern = daily, weekly, bi-weekly, semi-monthly, monthly, quarterly, semi-annually, annually
+    //stopType = date or count
+    //stopVal = date to stop on, or count of transactions
+    
+    $transactions = array();
+    $startDate = get_next_scheduled_day($startDate, $pattern);
+    
+    //how many of these transactions are needed?
+    if ("count" === $stopType) {
+      $transCnt = $stopVal;
+    } else {
+      //calculate how many
+      $transCnt = 0;
+    }
+    
+    //find the next occurrances (repeat $transCnt times)
+    //daily
+    
+    
+    //create a transaction
+    $set_id = 0;
+    foreach($transactions as $t) {
+      if (false !== $set_id ) {
+        $t->recurring_set_id = $set_id;
+      }
+      $t->create_ledger_item();
+      if (false === $set_id) {
+        //get recurring set id MAX
+        //increment rsID
+        //update ledger item with new recurring set id
+        //save recurring set id
+      }
+    }
+  }
   
   public function create_ledger_item($check_duplicates = false) {
     //check for possible duplicate first

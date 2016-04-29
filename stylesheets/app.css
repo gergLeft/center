@@ -475,6 +475,10 @@ img {
   display: none;
 }
 
+.hideI {
+  display: none !important;
+}
+
 .antialiased {
   -webkit-font-smoothing: antialiased;
 }
