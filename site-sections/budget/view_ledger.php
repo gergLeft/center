@@ -2,7 +2,7 @@
 
   set_include_path($_SERVER["DOCUMENT_ROOT"]);
   $page_title = 'Budget : View Ledger';
-  $page_tag = 'view_ledger';
+  $page_tag = 'budget-view_ledger';
   include 'functions.php';
 
   //page postback actions

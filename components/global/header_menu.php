@@ -55,6 +55,48 @@
               */?>
               
 	        </ul>
+            <?php //active if in a site section (budget, schedule, projects, etc...) ?>
+            
+            <?php 
+              $sections[] = array (
+                "title" => "Budget",
+                "actions" => array(
+                  array(
+                    "title" => "View Ledger",
+                    "url" => "/site-sections/budget/view_ledger.php"
+                  ),
+                  array(
+                    "title" => "Create Expense Category",
+                    "url" => "/site-sections/budget/create_expense_category.php"
+                  ),
+                  array(
+                    "title" => "Create Income Category",
+                    "url" => "/site-sections/budget/create_income_category.php"
+                  ),
+                  array(
+                    "title" => "Create Ledger Item",
+                    "url" => "/site-sections/budget/create_ledger_item.php"
+                  ),
+                  array(
+                    "title" => "Import Ledger Items",
+                    "url" => "/site-sections/budget/import_ledger_items.php"
+                  )
+                )
+              );
+            ?>
+	        <!-- Right Nav Section -->
+	        <ul class="middle">
+	          <li class="divider"></li>
+              <?php foreach ($sections as $s) : ?>
+              <li class="has-dropdown"><a href="#"><?php echo $s["title"]; ?></a>
+                <ul class="dropdown">
+                  <?php foreach ($s["actions"] as $a) : ?>
+                    <li><a href="<?php echo $a["url"]; ?>"><?php echo $a["title"]; ?></a>
+                  <?php endforeach; ?>
+                </ul>
+              </li>
+              <?php endforeach; ?>
+            </ul>
 	    
 	        <!-- Right Nav Section -->
 	        <ul class="right">

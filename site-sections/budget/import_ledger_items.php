@@ -2,7 +2,7 @@
 
   set_include_path($_SERVER["DOCUMENT_ROOT"]);
   $page_title = 'Budget : Import Ledger Items';
-  $page_tag = 'import_ledger_items';
+  $page_tag = 'budget-import_ledger_items';
   include 'functions.php';
 
   //page postback actions

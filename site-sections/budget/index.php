@@ -12,13 +12,6 @@
   /*TODO: Replace with ajax controls; doing it this way to get the database 
           and business logic established and allow output */
 ?>
-
-<a href="./create_expense_category.php">Create Expense Category</a><br />
-<a href="./create_income_category.php">Create Income Category</a><br />
-<a href="./create_ledger_item.php">Create Ledger Item</a><br />
-<a href="./view_ledger.php">View Ledger</a><br />
-<a href="./import_ledger_items.php">Import Ledger Items</a>
-
 <?php /* At a Glance Dashboard */ ?>
 
 <?php
