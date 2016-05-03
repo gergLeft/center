@@ -10,7 +10,7 @@
 
   <div class="row">
     <div class="small-12 large-6 columns">
-			<h2><?= $currentUser; ?></h2>
+			<h2><?php echo $currentUser; ?></h2>
     </div>
   </div>
 

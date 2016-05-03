@@ -29,29 +29,29 @@
     </div>  
     
     <?php if (isset($serverFeedback)) : ?>
-    <div class="row formRow <?= $serverFeedbackClass ?>">
+    <div class="row formRow <?php echo $serverFeedbackClass ?>">
       <div class="small-12 medium-6 small-centered columns">
-        <span id="lblServerFeedback"><?= $serverFeedback; ?></span>
+        <span id="lblServerFeedback"><?php echo $serverFeedback; ?></span>
       </div>
     </div>
     <?php endif; ?>
     
-    <div class="row formRow <?= $username_err ?>">
+    <div class="row formRow <?php echo $username_err ?>">
       <div class="small-12 medium-6 small-centered columns">
-        <label>Username: <?= REQUIRED_INDICATOR ?></label>
-        <input id="txtLoginUsername" name="txtLoginUsername" type="text" MaxLength="25" tabindex="10" value="<?= $form_display["txtLoginUsername"] ?>"/>
+        <label>Username: <?php echo REQUIRED_INDICATOR ?></label>
+        <input id="txtLoginUsername" name="txtLoginUsername" type="text" MaxLength="25" tabindex="10" value="<?php echo $form_display["txtLoginUsername"] ?>"/>
         <?php if (!empty($username_err)) :?>
-        <small class="error"><?= Message::translate_code_to_message(Message::MISSING_FIELD) ?></small>
+        <small class="error"><?php echo Message::translate_code_to_message(Message::MISSING_FIELD) ?></small>
         <?php endif; ?>
       </div>
     </div>
     
-    <div class="row formRow <?= $pwd_err ?>">
+    <div class="row formRow <?php echo $pwd_err ?>">
       <div class="small-12 medium-6 small-centered columns">
-        <label>Password: <?= REQUIRED_INDICATOR ?></label>
+        <label>Password: <?php echo REQUIRED_INDICATOR ?></label>
         <input id="txtLoginPassword" name="txtLoginPassword" type="password" MaxLength="25" tabindex="20" />
         <?php if (!empty($pwd_err)) :?>
-        <small class="error"><?= Message::translate_code_to_message(Message::MISSING_FIELD) ?></small>
+        <small class="error"><?php echo Message::translate_code_to_message(Message::MISSING_FIELD) ?></small>
         <?php endif; ?>
       </div>
     </div>

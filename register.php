@@ -57,39 +57,39 @@
     </div>  
     
     <?php if (isset($serverFeedback)) : ?>
-    <div class="row formRow <?= $serverFeedbackClass ?>">
+    <div class="row formRow <?php echo $serverFeedbackClass ?>">
       <div class="small-12 medium-6 small-centered columns">
-        <span id="lblServerFeedback"><?= $serverFeedback; ?></span>
+        <span id="lblServerFeedback"><?php echo $serverFeedback; ?></span>
       </div>
     </div>
     <?php endif; ?>
     
-    <div class="row formRow required <?= $username_err ?>">
+    <div class="row formRow required <?php echo $username_err ?>">
       <div class="small-12 medium-6 small-centered columns">
-        <label>Username: <?= REQUIRED_INDICATOR ?></label>
-        <input id="txtRegisterUsername" name="txtRegisterUsername" type="text" MaxLength="25" tabindex="10" value="<?= $form_display["txtRegisterUsername"] ?>"/>
+        <label>Username: <?php echo REQUIRED_INDICATOR ?></label>
+        <input id="txtRegisterUsername" name="txtRegisterUsername" type="text" MaxLength="25" tabindex="10" value="<?php echo $form_display["txtRegisterUsername"] ?>"/>
         <?php if (!empty($username_err)) :?>
-        <small class="error"><?= Message::translate_code_to_message(Message::DUPLICATE_USERNAME) ?></small>
+        <small class="error"><?php echo Message::translate_code_to_message(Message::DUPLICATE_USERNAME) ?></small>
         <?php endif; ?>
       </div>
     </div>
     
     <div class="row formRow required">
       <div class="small-12 medium-6 small-centered columns">
-        <label>Password: <?= REQUIRED_INDICATOR ?></label>
+        <label>Password: <?php echo REQUIRED_INDICATOR ?></label>
         <input id="txtRegisterPassword" name="txtRegisterPassword" type="password" MaxLength="25" tabindex="20" />
         <?php if (!empty($pwd_err)) :?>
-        <small class="error"><?= Message::translate_code_to_message(Message::PWD_TOO_WEAK) ?></small>
+        <small class="error"><?php echo Message::translate_code_to_message(Message::PWD_TOO_WEAK) ?></small>
         <?php endif; ?>
       </div>
     </div>
     
     <div class="row formRow required">
       <div class="small-12 medium-6 small-centered columns">
-        <label>Confirm Password: <?= REQUIRED_INDICATOR ?></label>
+        <label>Confirm Password: <?php echo REQUIRED_INDICATOR ?></label>
         <input id="txtConfirmPassword" name="txtConfirmPassword" type="password" MaxLength="25" tabindex="20" />
         <?php if (!empty($confirm_pwd_err)) :?>
-        <small class="error"><?= Message::translate_code_to_message(Message::PWD_DONT_MATCH) ?></small>
+        <small class="error"><?php echo Message::translate_code_to_message(Message::PWD_DONT_MATCH) ?></small>
         <?php endif; ?>
       </div>
     </div>
