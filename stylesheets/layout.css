@@ -54,3 +54,49 @@ and open the template in the editor.
   overflow: hidden;
   padding: 5px;
 }
+
+a.ledger_link {
+  color: inherit;
+}
+
+.progress {
+  height: 30px;
+}
+.progress .used {
+  padding: 5px 0px;
+  height: 25px;
+  background-color: green;
+  color: white;
+  clear: both;
+}
+
+.progress .used.budget_okay {
+  background-color: #00af1d;
+  color: white;
+}
+
+.progress .used.budget_caution {
+  background-color: #ffe900;
+  color: black;
+}
+
+.progress .used.budget_danger {
+  background-color: #ff9900 ;
+  color: black;
+}
+
+.progress .used.budget_over {
+  background-color: #d13333 ;
+  color: white;
+}
+
+.ledger_category, a.ledger_category {
+  display: inline-block;
+  border: 1px solid black;
+  margin: 2px;
+  background-color: white;
+  padding: 2px 7px 2px 5px;
+  color: #00af1d;
+  font-size: 12px;
+  font-style: italic;
+}

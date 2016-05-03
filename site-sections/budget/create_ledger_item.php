@@ -98,7 +98,7 @@
   
   <div class="row formRow required <?php echo $catName_err ?>">
     <div class="small-12 medium-6 small-centered columns">
-      <label>Type: <?php REQUIRED_INDICATOR ?>
+      <label>Type: <?php echo REQUIRED_INDICATOR ?>
         <select id='ddlType' name='ddlType'>
           <option value="<?php ledger_item::EXPENSE ?>"><?php ucwords(ledger_item::EXPENSE) ?></option>
           <option value="<?php ledger_item::INCOME ?>"><?php ucwords(ledger_item::INCOME) ?></option>
@@ -109,7 +109,7 @@
   
   <div class="row formRow required <?php echo $catName_err ?>">
     <div class="small-12 medium-6 small-centered columns">
-      <label>Category: <?php REQUIRED_INDICATOR ?>
+      <label>Category: <?php echo REQUIRED_INDICATOR ?>
         <?php echo $cats = budget_category::get_budget_categories(); ?>
         <select id='ddlCategory' name='ddlCategory'>
           <?php foreach ($cats as $cat) : ?>
@@ -122,10 +122,10 @@
   
   <div class="row formRow required <?php echo $compName_err ?>">
     <div class="small-12 medium-6 small-centered columns">
-      <label>Company: <?php REQUIRED_INDICATOR ?>
+      <label>Company: <?php echo REQUIRED_INDICATOR ?>
         <input id="txtCompany" name="txtCompany" type="text" MaxLength="50" value="<?php echo $form_display["txtCompany"] ?>"/>
         <?php if (!empty($compName_err)) :?>
-        <small class="error"><?php Message::translate_code_to_message(Message::FIELD_MISSING) ?></small>
+        <small class="error"><?php echo Message::translate_code_to_message(Message::FIELD_MISSING) ?></small>
         <?php endif; ?>
       </label>
     </div>
@@ -133,7 +133,7 @@
   
   <div class="row formRow required <?php echo $value_err ?>">
     <div class="small-12 medium-6 small-centered columns">
-      <label>Value: <?php REQUIRED_INDICATOR ?>
+      <label>Value: <?php echo REQUIRED_INDICATOR ?>
         <div class="row">
           <div class="small-1 columns">
             <span class="prefix">$</span>
@@ -142,7 +142,7 @@
             <input id="txtValue" name="txtValue" type="text" MaxLength="50" value="<?php echo $form_display["txtValue"] ?>" placeholder="0.00" />
           </div>
           <?php if (!empty($value_err)) :?>
-          <small class="error"><?php Message::translate_code_to_message(Message::FIELD_MISSING) ?></small>
+          <small class="error"><?php echo Message::translate_code_to_message(Message::FIELD_MISSING) ?></small>
           <?php endif; ?>
         </div>      
       </label>
@@ -151,11 +151,11 @@
   
   <div class="row formRow required <?php echo $value_err ?>">
     <div class="small-12 medium-6 small-centered columns">
-      <label>Date: <?php REQUIRED_INDICATOR ?>
+      <label>Date: <?php echo REQUIRED_INDICATOR ?>
       <input id="txtDate" name="txtDate" type="text" MaxLength="50" value="<?php echo $form_display["txtDate"] ?>" placeholder="mm/dd/yyyy" class="foundation-date" />
       </label>
       <?php if (!empty($value_err)) :?>
-      <small class="error"><?php Message::translate_code_to_message(Message::FIELD_MISSING) ?></small>
+      <small class="error"><?php echo Message::translate_code_to_message(Message::FIELD_MISSING) ?></small>
       <?php endif; ?>
     </div>
     <?php /*<div class="small-12 medium-6 small-centered columns">
@@ -175,7 +175,7 @@
   
   <div class="row formRow hide" id="recurring_details">
     <div class="small-12 medium-6 small-centered columns">
-      <label>Recurring Schedule: <?php REQUIRED_INDICATOR ?>
+      <label>Recurring Schedule: <?php echo REQUIRED_INDICATOR ?>
         <select id='ddlSchedule' name='ddlSchedule'>
           <option value="<?php ledger_item::SCHEDULE_DAILY ?>">Daily</option>
           <option value="<?php ledger_item::SCHEDULE_WEEKLY ?>">Weekly</option>
@@ -189,7 +189,7 @@
       </label>
     </div>
     <div class="small-12 medium-6 small-centered columns">
-      <label>Recurring Schedule Base: <?php REQUIRED_INDICATOR ?>
+      <label>Recurring Schedule Base: <?php echo REQUIRED_INDICATOR ?>
         <span class="scheduleBaseVisibilityCtrl scheduleBaseVisibilityCtrl_day"><br />Every day</span>
         <select id='ddlSchedule_date_week' name='ddlSchedule_date_week' class="scheduleBaseVisibilityCtrl scheduleBaseVisibilityCtrl_week  hideI" >
           <option value="sunday">Sunday</option>

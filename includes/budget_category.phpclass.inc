@@ -56,6 +56,25 @@ class budget_category {
     
     return false;
   }
+  
+  function __construct($catId = null) {
+    if (!is_null($catId)) {
+      $db = new db_sql();
+      $query = "SELECT * FROM budget_categories";
+      $query .= " WHERE id = " . $catId;
+      $db->query($query);
+
+      if ($db->next_record()) {
+        $this->id = $db->f("id");
+        $this->name = $db->f("name");
+        $this->type = $db->f("type");
+        $this->value = abs($db->f("value"));
+        $this->allow_carryOver = $db->f("allow_carryOver");
+        $this->tax_deductible = $db->f("tax_deductible");
+      }
+    }
+  }
+  
   public static function get_budget_categories() {
     $db = new db_sql();
     $query = "SELECT * FROM budget_categories";
@@ -86,20 +105,35 @@ class budget_category {
     return $cats;
   }
   
-  public static function getAllCategoryState() {
+  public static function getAllCategoryStateForMonth($date) {
+    $args = array(
+        array(
+          "field" => "date",
+          "compare" => ">=",
+          "value" => date("y-m-d 00:00:00", strtotime("first day of this month", strtotime($date)))
+        ),
+        array(
+          "field" => "date",
+          "compare" => "<=",
+          "value" => date("y-m-d 23:59:59", strtotime("last day of this month", strtotime($date)))
+        )
+    );
+    return self::getAllCategoryState($args);
+  }
+  
+  public static function getAllCategoryState($ledger_item_args = array()) {
     //first get all the cateogries (expense & income)
     $all_cats = self::get_budget_categories();
     
     //next get all the ledger items (expense & income)
-    $all_ledgers = ledger_item::get_all_ledger_items();
+    $all_ledgers = ledger_item::get_all_ledger_items($ledger_item_args);
     
     //load each ledger into associated category
 	if ($all_ledgers !== false) {
 		foreach ($all_ledgers as $ledger) {
-		  $all_cats[$ledger->category]->amount_used += abs($ledger->value);
+    	  $all_cats[$ledger->category]->amount_used += abs($ledger->value);
 		}
 	}
-    
     return $all_cats;
   }
   

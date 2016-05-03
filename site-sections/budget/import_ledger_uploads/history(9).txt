@@ -1,5 +1,0 @@
-
-Suffix,Effective Date,Transaction Description,Amount,Withheld,Balance
-
-9 - CHECKING,04/19/2015,Purchase: 023 PIZZA HUT 316903169190 LAMBERTVILLE MI Card: ****3421 04/17/2015,-19.59,0.00,2944.71
-9 - CHECKING,04/18/2015,Beginning Balance,0.00,0.00,2964.30

@@ -62,6 +62,10 @@
                 "title" => "Budget",
                 "actions" => array(
                   array(
+                    "title" => "Budget Dashboard",
+                    "url" => "/site-sections/budget/index.php"
+                  ),
+                  array(
                     "title" => "View Ledger",
                     "url" => "/site-sections/budget/view_ledger.php"
                   ),

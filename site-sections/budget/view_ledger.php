@@ -13,23 +13,44 @@
 
 <?php //Table containing ledger items for the current month ?>
 <?php 
+  //get all ledger items
+  //TODO: add filter for only this month
+  if (isset($_GET["c"])) {
+    $ledger_items = ledger_item::get_all_ledger_items_by_cat($_GET["c"]);
+    $catFilter = "&c=" . $_GET["c"];
+  } else {
+    $ledger_items = ledger_item::get_all_ledger_items();
+    $catFilter = "";
+  }  
+?>
+<?php 
   //get today, start of month, and end of month dates
   $baseDate = isset($_GET["d"]) ? $_GET["d"] : date('m/d/y');
   $month_start = date('m/01/y', strtotime($baseDate));
   $month_end = date('m/t/y', strtotime($baseDate));
-  $eodBalance = ledger_item::get_starting_balance($month_start);
-  
-  //get all ledger items
-  //TODO: add filter for only this month
-  $ledger_items = ledger_item::get_all_ledger_items();
+  if ("" === $catFilter) {
+    $eodBalance = ledger_item::get_starting_balance($month_start);
+    $all_cats = budget_category::get_budget_categories();
+  }
 ?>
-
+<div class="row">
+  <h2>
+  <?php /*title = Date Range (Month Year) - Category */ ?>
+  <?php echo date("M Y", strtotime($month_start)); ?>
+  <?php 
+    if ("" !== $catFilter) : 
+      $activeCat = new budget_category($_GET["c"]);
+  ?>
+   - <?php echo $activeCat->name; ?>
+  <?php endif; ?>
+  </h2>
+</div>
 <div class="row">
   <div class="columns small-6">
-    <a href="/site-sections/budget/view_ledger.php?d=<?php echo date('m/01/y', strtotime($month_start . ' -1 day')); ?> ">&ltdot;Previous Month</a>
+    <a href="/site-sections/budget/view_ledger.php?d=<?php echo date('m/01/y', strtotime($month_start . ' -1 day')); echo $catFilter; ?> ">&ltdot;Previous Month</a>
   </div>
   <div class="columns small-6 text-right">
-    <a href="/site-sections/budget/view_ledger.php?d=<?php echo date('m/01/y', strtotime($month_end . ' +1 day')); ?> ">Next Month&gtdot;</a>
+    <a href="/site-sections/budget/view_ledger.php?d=<?php echo date('m/01/y', strtotime($month_end . ' +1 day')); echo $catFilter; ?> ">Next Month&gtdot;</a>
   </div>
 </div>
 
@@ -59,12 +80,14 @@
   <div class="columns small-6 medium-2 large-1 ledger_day_heading">
     <?php echo date('m/d/y', $d); ?>
   </div>
+  <?php if ("" === $catFilter) : ?>
   <div class="columns small-6 medium-2 large-1 ledger_day_heading">
     <?php 
       $eodBalance += $day_summary; 
       echo sprintf("$%01.2f", $eodBalance); 
     ?>
   </div>
+  <?php endif; ?>
   <div class="columns small-6 medium-2 large-1 ledger_day_heading">
     <?php echo sprintf("$%01.2f", $day_summary); ?>
   </div>
@@ -72,8 +95,13 @@
     <div class="row">
       <?php foreach ($day_transactions as $t) : ?>
       <div class="columns small-12 medium-4 large-3 <?php echo ($t->type === ledger_item::EXPENSE) ? "expense-record" : "income-record"; ?>">
-        <?php echo sprintf("$%01.2f", $t->value); ?> - 
+        <a href="/site-sections/budget/edit_ledger_item.php?tid=<?php echo $t->id; ?>" class="ledger_link">
+          <?php echo sprintf("$%01.2f", $t->value); ?> - 
         <?php echo $t->company; ?>
+        </a><br />
+        <?php if (isset($all_cats)) : ?>
+        <a class="ledger_category ledger_link" href="/site-sections/budget/view_ledger.php?d=<?php echo $month_start . "&c=" . $t->category; ?> " ><?php echo $all_cats[$t->category]->name; ?></a>
+        <?php endif; ?>
       </div>
       <?php endforeach; ?>
     </div>
@@ -83,10 +111,10 @@
 
 <div class="row">
   <div class="columns small-6">
-    <a href="/site-sections/budget/view_ledger.php?d=<?php echo date('m/01/y', strtotime($month_start . ' -1 day')); ?> ">&ltdot;Previous Month</a>
+    <a href="/site-sections/budget/view_ledger.php?d=<?php echo date('m/01/y', strtotime($month_start . ' -1 day')); echo $catFilter; ?> ">&ltdot;Previous Month</a>
   </div>
   <div class="columns small-6 text-right">
-    <a href="/site-sections/budget/view_ledger.php?d=<?php echo date('m/01/y', strtotime($month_end . ' +1 day')); ?> ">Next Month&gtdot;</a>
+    <a href="/site-sections/budget/view_ledger.php?d=<?php echo date('m/01/y', strtotime($month_end . ' +1 day')); echo $catFilter; ?> ">Next Month&gtdot;</a>
   </div>
 </div>
 

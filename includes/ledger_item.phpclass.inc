@@ -28,6 +28,12 @@ class ledger_item {
   public $status = self::STATUS_CLEARED;
   public $recurring_set_id = false;
   
+  function __construct($id = null) {
+    if ($id !== null) {
+      self::getLedgerBy_criteria(array(array("field"=>"id", "compare"=>"=", "value"=>$id)));
+    }
+  }
+  
   public function create_recurring_ledger_item($pattern, $stopType, $stopVal) {
     //pattern = daily, weekly, bi-weekly, semi-monthly, monthly, quarterly, semi-annually, annually
     //stopType = date or count
@@ -107,6 +113,28 @@ class ledger_item {
     }
   }
   
+  
+  public function update_ledger_item() {
+    //no possible duplicates found or ignored
+    $db = new db_sql();
+    $query = "UPDATE ledger_items SET ";
+    $query .= sprintf("type = '%s', ", $this->type);
+    $query .= sprintf("value = '%s', ", abs($this->value));
+    $query .= sprintf("category = %s, ", $this->category);
+    $query .= sprintf("company = '%s', ", mysql_real_escape_string($this->company));
+    $query .= sprintf("date = '%s' ", date('Y-m-d H:i:s', strtotime($this->date . " " . $this->time)));
+    $query .= sprintf(" WHERE id = '%s' ", $this->id);
+
+    $db->query($query);
+
+    if ($db->Error) {
+      throw new Exception($db->Error);
+    } else {
+      $this->id = $db->last_id();
+      return true;
+    }
+  }
+  
   public function getLedgerByID($id) {
     return $this->getLedgerBy_criteria(array( array("field"=> "id", "compare"=>"=", "value"=>$id) ) );
   }
@@ -140,9 +168,26 @@ class ledger_item {
     }
   }
   
-  public static function get_all_ledger_items() {
+  public static function get_all_ledger_items_by_cat($cat) {
+    $args = array(
+      array(
+        "field"=>"category",
+        "compare"=>"=",
+        "value"=>$cat,
+      )
+    );
+    return self::get_all_ledger_items($args);
+  }
+  
+  public static function get_all_ledger_items($arr = array()) {
     $l = new ledger_item();
-    return $l->getLedgerBy_criteria();//TODO: place limit to query.
+    $result = $l->getLedgerBy_criteria($arr);//TODO: place limit to query.
+    
+    if (true === $result) {
+      return array($l);
+    } else {
+      return $result;
+    }
   }
   
   public function has_possible_duplicate($li) {
@@ -213,6 +258,10 @@ class ledger_item {
       $this->type = $return_arr[0]->type;
       $this->category = $return_arr[0]->category;
       $this->company = $return_arr[0]->company;
+      $this->date = $return_arr[0]->date;
+      $this->time = $return_arr[0]->time;
+      $this->value = $return_arr[0]->value;
+      
       return true;
     } else {
       return $return_arr;
