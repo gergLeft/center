@@ -24,6 +24,15 @@
   $ledger_items = ledger_item::get_all_ledger_items();
 ?>
 
+<div class="row">
+  <div class="columns small-6">
+    <a href="/site-sections/budget/view_ledger.php?d=<?php echo date('m/01/y', strtotime($month_start . ' -1 day')); ?> ">&ltdot;Previous Month</a>
+  </div>
+  <div class="columns small-6 text-right">
+    <a href="/site-sections/budget/view_ledger.php?d=<?php echo date('m/01/y', strtotime($month_end . ' +1 day')); ?> ">Next Month&gtdot;</a>
+  </div>
+</div>
+
 <?php //iterate through days of month
   $alt = false;
   for ($d = strtotime($month_start); $d <= strtotime($month_end); $d = strtotime(date('m/d/y', $d) . ' +1 day')) : 
@@ -72,8 +81,14 @@
 </div>
 <?php endfor; ?>
 
-<a href="/site-sections/budget/view_ledger.php?d=<?php echo date('m/01/y', strtotime($month_start . ' -1 day')); ?> ">&ltdot;Previous Month</a>
-<a href="/site-sections/budget/view_ledger.php?d=<?php echo date('m/01/y', strtotime($month_end . ' +1 day')); ?> ">Next Month&gtdot;</a>
+<div class="row">
+  <div class="columns small-6">
+    <a href="/site-sections/budget/view_ledger.php?d=<?php echo date('m/01/y', strtotime($month_start . ' -1 day')); ?> ">&ltdot;Previous Month</a>
+  </div>
+  <div class="columns small-6 text-right">
+    <a href="/site-sections/budget/view_ledger.php?d=<?php echo date('m/01/y', strtotime($month_end . ' +1 day')); ?> ">Next Month&gtdot;</a>
+  </div>
+</div>
 
 <?php include "components/global/footer.php"; ?>
   

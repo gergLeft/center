@@ -67,7 +67,8 @@
               break;
           }
           
-          $new_ledger_item->create_recurring_ledger_item($_POST['ddlSchedule'], $scheduleDate, $_POST["stopSchedule"], $_POST["stopSchedule_" . $_POST["stopSchedule"] . "_value"] );
+          $ledger_item_set = $new_ledger_item->create_recurring_ledger_item($_POST['ddlSchedule'], $scheduleDate, $_POST["stopSchedule"], $_POST["stopSchedule_" . $_POST["stopSchedule"] . "_value"] );
+          dump($ledger_item_set);
         } else {
           $new_ledger_item->create_ledger_item();
         }
@@ -88,78 +89,78 @@
   
 <form class="custom" method="POST">
    <?php if (isset($serverFeedback)) : ?>
-  <div class="row formRow <?= $serverFeedbackClass ?>">
+  <div class="row formRow <?php echo $serverFeedbackClass ?>">
     <div class="small-12 medium-6 small-centered columns">
-      <span id="lblServerFeedback"><?= $serverFeedback; ?></span>
+      <span id="lblServerFeedback"><?php echo $serverFeedback; ?></span>
     </div>
   </div>
   <?php endif; ?>
   
-  <div class="row formRow required <?= $catName_err ?>">
+  <div class="row formRow required <?php echo $catName_err ?>">
     <div class="small-12 medium-6 small-centered columns">
-      <label>Type: <?= REQUIRED_INDICATOR ?>
+      <label>Type: <?php REQUIRED_INDICATOR ?>
         <select id='ddlType' name='ddlType'>
-          <option value="<?= ledger_item::EXPENSE ?>"><?= ucwords(ledger_item::EXPENSE) ?></option>
-          <option value="<?= ledger_item::INCOME ?>"><?= ucwords(ledger_item::INCOME) ?></option>
+          <option value="<?php ledger_item::EXPENSE ?>"><?php ucwords(ledger_item::EXPENSE) ?></option>
+          <option value="<?php ledger_item::INCOME ?>"><?php ucwords(ledger_item::INCOME) ?></option>
         </select>
       </label>
     </div>
   </div>
   
-  <div class="row formRow required <?= $catName_err ?>">
+  <div class="row formRow required <?php echo $catName_err ?>">
     <div class="small-12 medium-6 small-centered columns">
-      <label>Category: <?= REQUIRED_INDICATOR ?>
-        <?php $cats = budget_category::get_budget_categories(); ?>
+      <label>Category: <?php REQUIRED_INDICATOR ?>
+        <?php echo $cats = budget_category::get_budget_categories(); ?>
         <select id='ddlCategory' name='ddlCategory'>
           <?php foreach ($cats as $cat) : ?>
-              <option value="<?= $cat->id; ?>"><?= $cat->name; ?></option>
+              <option value="<?php echo $cat->id; ?>"><?php echo $cat->name; ?></option>
           <?php endforeach; ?>
         </select>
       </label>
     </div>
   </div>
   
-  <div class="row formRow required <?= $compName_err ?>">
+  <div class="row formRow required <?php echo $compName_err ?>">
     <div class="small-12 medium-6 small-centered columns">
-      <label>Company: <?= REQUIRED_INDICATOR ?>
-        <input id="txtCompany" name="txtCompany" type="text" MaxLength="50" value="<?= $form_display["txtCompany"] ?>"/>
+      <label>Company: <?php REQUIRED_INDICATOR ?>
+        <input id="txtCompany" name="txtCompany" type="text" MaxLength="50" value="<?php echo $form_display["txtCompany"] ?>"/>
         <?php if (!empty($compName_err)) :?>
-        <small class="error"><?= Message::translate_code_to_message(Message::FIELD_MISSING) ?></small>
+        <small class="error"><?php Message::translate_code_to_message(Message::FIELD_MISSING) ?></small>
         <?php endif; ?>
       </label>
     </div>
   </div>
   
-  <div class="row formRow required <?= $value_err ?>">
+  <div class="row formRow required <?php echo $value_err ?>">
     <div class="small-12 medium-6 small-centered columns">
-      <label>Value: <?= REQUIRED_INDICATOR ?>
+      <label>Value: <?php REQUIRED_INDICATOR ?>
         <div class="row">
           <div class="small-1 columns">
             <span class="prefix">$</span>
           </div>
           <div class='small-11 columns'>
-            <input id="txtValue" name="txtValue" type="text" MaxLength="50" value="<?= $form_display["txtValue"] ?>" placeholder="0.00" />
+            <input id="txtValue" name="txtValue" type="text" MaxLength="50" value="<?php echo $form_display["txtValue"] ?>" placeholder="0.00" />
           </div>
           <?php if (!empty($value_err)) :?>
-          <small class="error"><?= Message::translate_code_to_message(Message::FIELD_MISSING) ?></small>
+          <small class="error"><?php Message::translate_code_to_message(Message::FIELD_MISSING) ?></small>
           <?php endif; ?>
         </div>      
       </label>
     </div>
   </div>
   
-  <div class="row formRow required <?= $value_err ?>">
+  <div class="row formRow required <?php echo $value_err ?>">
     <div class="small-12 medium-6 small-centered columns">
-      <label>Date: <?= REQUIRED_INDICATOR ?>
-      <input id="txtDate" name="txtDate" type="text" MaxLength="50" value="<?= $form_display["txtDate"] ?>" placeholder="mm/dd/yyyy" class="foundation-date" />
+      <label>Date: <?php REQUIRED_INDICATOR ?>
+      <input id="txtDate" name="txtDate" type="text" MaxLength="50" value="<?php echo $form_display["txtDate"] ?>" placeholder="mm/dd/yyyy" class="foundation-date" />
       </label>
       <?php if (!empty($value_err)) :?>
-      <small class="error"><?= Message::translate_code_to_message(Message::FIELD_MISSING) ?></small>
+      <small class="error"><?php Message::translate_code_to_message(Message::FIELD_MISSING) ?></small>
       <?php endif; ?>
     </div>
     <?php /*<div class="small-12 medium-6 small-centered columns">
       <label>Time:
-      <input id="txtTime" name="txtTime" type="text" MaxLength="50" value="<?= $form_display["txtTime"] ?>" placeholder="00:00 am/pm" class="foundation-time"/>
+      <input id="txtTime" name="txtTime" type="text" MaxLength="50" value="<?php echo $form_display["txtTime"] ?>" placeholder="00:00 am/pm" class="foundation-time"/>
       </label>
     </div>*/ ?>
   </div>
@@ -174,21 +175,21 @@
   
   <div class="row formRow hide" id="recurring_details">
     <div class="small-12 medium-6 small-centered columns">
-      <label>Recurring Schedule: <?= REQUIRED_INDICATOR ?>
+      <label>Recurring Schedule: <?php REQUIRED_INDICATOR ?>
         <select id='ddlSchedule' name='ddlSchedule'>
-          <option value="<?= ledger_item::SCHEDULE_DAILY ?>">Daily</option>
-          <option value="<?= ledger_item::SCHEDULE_WEEKLY ?>">Weekly</option>
-          <option value="<?= ledger_item::SCHEDULE_BIWEEKLY ?>">Bi-Weekly</option>
-          <option value="<?= ledger_item::SCHEDULE_SEMIMONTHLY ?>">Semi-Monthly</option>
-          <option value="<?= ledger_item::SCHEDULE_MONTHLY ?>">Monthly</option>
-          <option value="<?= ledger_item::SCHEDULE_QUARTERLY ?>">Quarterly</option>
-          <option value="<?= ledger_item::SCHEDULE_SEMIANNUALLY ?>">Semi-Annually</option>
-          <option value="<?= ledger_item::SCHEDULE_ANNUALLY ?>">Annually</option>
+          <option value="<?php ledger_item::SCHEDULE_DAILY ?>">Daily</option>
+          <option value="<?php ledger_item::SCHEDULE_WEEKLY ?>">Weekly</option>
+          <option value="<?php ledger_item::SCHEDULE_BIWEEKLY ?>">Bi-Weekly</option>
+          <option value="<?php ledger_item::SCHEDULE_SEMIMONTHLY ?>">Semi-Monthly</option>
+          <option value="<?php ledger_item::SCHEDULE_MONTHLY ?>">Monthly</option>
+          <option value="<?php ledger_item::SCHEDULE_QUARTERLY ?>">Quarterly</option>
+          <option value="<?php ledger_item::SCHEDULE_SEMIANNUALLY ?>">Semi-Annually</option>
+          <option value="<?php ledger_item::SCHEDULE_ANNUALLY ?>">Annually</option>
         </select>
       </label>
     </div>
     <div class="small-12 medium-6 small-centered columns">
-      <label>Recurring Schedule Base: <?= REQUIRED_INDICATOR ?>
+      <label>Recurring Schedule Base: <?php REQUIRED_INDICATOR ?>
         <span class="scheduleBaseVisibilityCtrl scheduleBaseVisibilityCtrl_day"><br />Every day</span>
         <select id='ddlSchedule_date_week' name='ddlSchedule_date_week' class="scheduleBaseVisibilityCtrl scheduleBaseVisibilityCtrl_week  hideI" >
           <option value="sunday">Sunday</option>
@@ -201,7 +202,7 @@
         </select>
         <select id='ddlSchedule_date_month' name='ddlSchedule_date_month' class="scheduleBaseVisibilityCtrl scheduleBaseVisibilityCtrl_month hideI" >
           <?php for ($i=1; $i<=31; $i++) : ?>
-          <option value="<?= $i ?>"><?= $i <= 28 ? $i : $i . " (or last day of month)" ?></option>
+          <option value="<?php echo $i ?>"><?php echo $i <= 28 ? $i : $i . " (or last day of month)" ?></option>
           <?php endfor; ?>
         </select>
         <input type="text" id="txtSchedule_date_year" name="txtSchedule_date_year" class="scheduleBaseVisibilityCtrl scheduleBaseVisibilityCtrl_year hideI foundation-date" />

@@ -43,12 +43,26 @@ function get_next_scheduled_day($startDate, $pattern) {
       $date = strtotime("+1 month", strtotime($startDate));
       break;
     case ledger_item::SCHEDULE_SEMIMONTHLY://day of month & day of month+15 days
-      $date = strtotime("+15 days", strtotime($startDate));//monthly
-      
-      if (date("m", $date) !== date("m", strtotime($startDate))) {
-        //different month, instead - go forward 1 month, then back 15 days
-        $date = strtotime("+1 month", strtotime($startDate));//monthly
-        $date = strtotime("-15 days", $date);//monthly
+      $sdt = strtotime($startDate);
+      $d = date("d", $sdt);
+      $m = date("m", $sdt);
+      $y = date("y", $sdt);
+      if ( $d <= 13) {
+        //$date = this month, 15 days after "d"
+        $date = strtotime("+15 days", $sdt);//monthly
+      } else if ( 14 == $d || 15 == $d || 16 == $d) {
+        $date = strtotime("+15 days", $sdt);//monthly
+        dump(date("m", $date));
+        dump($m);
+        if (date("m", $date) !== $m) {
+          $date = strtotime("last day of this month", $sdt);
+        }
+      } else {
+        $d = (31 == $d) ? $d = 15 : $d-15;
+        $sd = strtotime("+1 month", strtotime($m . "/01/" . $y));//next month
+        $m = date("m", $sd);
+        $y = date("y", $sd);
+        $date = strtotime($m . "/" . $d . "/" . $y);
       }
       break;
     case ledger_item::SCHEDULE_QUARTERLY://day of month & day of month+15 days

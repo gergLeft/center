@@ -86,26 +86,26 @@ Log: <?php dump($error_log);?>
 <hr />
 <h5>Resolve Duplications</h5>
 <form class="custom" method="POST">
-<?php $d=0;foreach($duplicates as $dup) : $d++; ?>
+<?php echo $d=0;foreach($duplicates as $dup) : $d++; ?>
 <div class="row">
   <div class="columns large-1">
-    <select name="dup_trans_key-<?= $d ?>" id="dup_trans_key-<?= $d ?>">
+    <select name="dup_trans_key-<?php echo $d ?>" id="dup_trans_key-<?php echo $d ?>">
       <option value=""> - </option>
       <option value="create">Approve</option>
       <option value="skip">Deny</option>
     </select>
   </div>
-  <?php $new = true; foreach ($dup as $trans) : ?>
+  <?php echo $new = true; foreach ($dup as $trans) : ?>
   
   <div class="columns large-5 <?php echo $new ? "import-trans" : "duplicate-trans"; ?>" >
     
     <?php if ($new) :?>
-    <input type="hidden" name="dup_trans_type-<?= $d ?>" id="dup_trans_type-<?= $d ?>" value="<?= $trans->type ?>" />
-    <input type="hidden" name="dup_trans_category-<?= $d ?>" id="dup_trans_category-<?= $d ?>" value="<?= $trans->category ?>" />
-    <input type="hidden" name="dup_trans_company-<?= $d ?>" id="dup_trans_company-<?= $d ?>" value="<?= $trans->company ?>" />
-    <input type="hidden" name="dup_trans_value-<?= $d ?>" id="dup_trans_value-<?= $d ?>" value="<?= $trans->value ?>" />
-    <input type="hidden" name="dup_trans_date-<?= $d ?>" id="dup_trans_date-<?= $d ?>" value="<?= $trans->date ?>" />
-    <input type="hidden" name="dup_trans_time-<?= $d ?>" id="dup_trans_time-<?= $d ?>" value="<?= $trans->time ?>" />
+    <input type="hidden" name="dup_trans_type-<?php echo $d ?>" id="dup_trans_type-<?php echo $d ?>" value="<?php echo $trans->type ?>" />
+    <input type="hidden" name="dup_trans_category-<?php echo $d ?>" id="dup_trans_category-<?php echo $d ?>" value="<?php echo $trans->category ?>" />
+    <input type="hidden" name="dup_trans_company-<?php echo $d ?>" id="dup_trans_company-<?php echo $d ?>" value="<?php echo $trans->company ?>" />
+    <input type="hidden" name="dup_trans_value-<?php echo $d ?>" id="dup_trans_value-<?php echo $d ?>" value="<?php echo $trans->value ?>" />
+    <input type="hidden" name="dup_trans_date-<?php echo $d ?>" id="dup_trans_date-<?php echo $d ?>" value="<?php echo $trans->date ?>" />
+    <input type="hidden" name="dup_trans_time-<?php echo $d ?>" id="dup_trans_time-<?php echo $d ?>" value="<?php echo $trans->time ?>" />
     <?php 
         $new = false;
       endif; 

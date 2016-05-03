@@ -45,24 +45,24 @@
 <?php foreach ($category as $cat) : ?>
   <div class="row">
     <div class="columns small-3">
-      <a href="./category_detail.php?c=<?= $cat->id ?>"><?= $cat->name ?></a>
+      <a href="./category_detail.php?c=<?php echo $cat->id ?>"><?php echo $cat->name ?></a>
     </div>
     <div class="columns small-3">
       <?php if ($cat->value > 0) : ?>
-      <?= $cat->amount_used ?> / <?= $cat->value ?> 
+      <?php echo $cat->amount_used ?> / <?php echo $cat->value ?> 
       <?php else: ?>
       &nbsp;
       <?php endif; ?>
     </div>
     <div class="columns small-2">
-      [<?= $cat->value - $cat->amount_used ?>]
+      [<?php echo $cat->value - $cat->amount_used ?>]
     </div>
     <div class="columns small-2">
-      [<?= $cat->amount_used ?>]
+      [<?php echo $cat->amount_used ?>]
     </div>
     <div class="columns small-2">
       <?php if ($cat->value > 0) : ?>
-      (<?= $cat->amount_used / $cat->value * 100 ?>%)
+      (<?php echo $cat->amount_used / $cat->value * 100 ?>%)
       <?php else: ?>
       &nbsp;
       <?php endif; ?>

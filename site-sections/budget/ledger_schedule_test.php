@@ -7,6 +7,7 @@
   include '/functions.php';
   include 'components/global/header.php';
   
+  //DAILY
   $tests[] = array(
       "args" => array(
         'date' => "05/01/2016", //the transaction date
@@ -16,6 +17,8 @@
       "expected" => "05/02/2016", //date of the transaction that is expected
       "results" => ""//date of the transaction that is returned
   );
+  
+  //WEEKLY
   $tests[] = array(
       "args" => array(
         'date' => "05/01/2016", //the transaction date
@@ -25,6 +28,8 @@
       "expected" => "05/08/2016", //date of the transaction that is expected
       "results" => ""//date of the transaction that is returned
   );
+  
+  //BI-WEEKLY
   $tests[] = array(
       "args" => array(
         'date' => "05/01/2016", //the transaction date
@@ -34,6 +39,8 @@
       "expected" => "05/15/2016", //date of the transaction that is expected
       "results" => ""//date of the transaction that is returned
   );
+  
+  //SEMI-MONTHLY
   $tests[] = array(
       "args" => array(
         'date' => "05/01/2016", //the transaction date
@@ -79,6 +86,8 @@
       "expected" => "06/15/2016", //date of the transaction that is expected
       "results" => ""//date of the transaction that is returned
   );
+  
+  //MONTHLY
   $tests[] = array(
       "args" => array(
         'date' => "05/01/2016", //the transaction date
@@ -88,6 +97,8 @@
       "expected" => "06/01/2016", //date of the transaction that is expected
       "results" => ""//date of the transaction that is returned
   );
+  
+  //QUARTERLY
   $tests[] = array(
       "args" => array(
         'date' => "05/01/2016", //the transaction date
@@ -97,6 +108,8 @@
       "expected" => "08/01/2016", //date of the transaction that is expected
       "results" => ""//date of the transaction that is returned
   );
+  
+  //SEMI-ANNUAL
   $tests[] = array(
       "args" => array(
         'date' => "05/01/2016", //the transaction date
@@ -106,6 +119,8 @@
       "expected" => "11/01/2016", //date of the transaction that is expected
       "results" => ""//date of the transaction that is returned
   );
+  
+  //ANNUAL
   $tests[] = array(
       "args" => array(
         'date' => "05/01/2016", //the transaction date

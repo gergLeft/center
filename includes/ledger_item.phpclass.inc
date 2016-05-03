@@ -34,34 +34,48 @@ class ledger_item {
     //stopVal = date to stop on, or count of transactions
     
     $transactions = array();
-    $startDate = get_next_scheduled_day($startDate, $pattern);
     
-    //how many of these transactions are needed?
+    //index = 0, date selected; 
+    $base = new ledger_item();
+    $base->type = $this->type;
+    $base->category = $this->category;
+    $base->company = $this->company;
+    $base->value = $this->value;
+    $base->date = $this->date;
+    $base->time = $this->time;
+    $base->status = $this->status;
+    //$base->recurring_set_id = $base->create_ledger_item();
+    //TODO: update recurring_set_id on base transactions
+    $transactions[] = $base;
+    
+    //find out how many transactions we need
     if ("count" === $stopType) {
-      $transCnt = $stopVal;
+      $nextDate = $base->date;
+      
+      for ($i=0; $i <=$stopVal; $i++) {
+        $nextTrans = $baseItem;
+        $nextTrans->date = get_next_scheduled_day($nextDate, $pattern);
+        //$nextTrans->id = $nextTrans->create_ledger_item();
+        $transactions[] = $nextTrans;
+        
+        //increment the date so it'll advance
+        $nextDate = $nextTrans->date;
+      }
     } else {
-      //calculate how many
-      $transCnt = 0;
-    }
-    
-    //find the next occurrances (repeat $transCnt times)
-    //daily
-    
-    
-    //create a transaction
-    $set_id = 0;
-    foreach($transactions as $t) {
-      if (false !== $set_id ) {
-        $t->recurring_set_id = $set_id;
-      }
-      $t->create_ledger_item();
-      if (false === $set_id) {
-        //get recurring set id MAX
-        //increment rsID
-        //update ledger item with new recurring set id
-        //save recurring set id
+      //populate next date so it can be checked in the conditional
+      $nextDate = get_next_scheduled_day($startDate, $pattern);
+      
+      while (strtotime($nextDate) <= $strtotime($stopVal)) {
+        $nextTrans = $baseItem;
+        $nextTrans->date = $nextDate; 
+        //$nextTrans->id = $nextTrans->create_ledger_item();
+        $transactions[] = $nextTrans;
+        
+        //populate next date so it can be checked in the conditional again
+        $nextDate = get_next_scheduled_day($startDate, $pattern);
       }
     }
+    return $transactions;
   }
   
   public function create_ledger_item($check_duplicates = false) {

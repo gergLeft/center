@@ -16,7 +16,7 @@
 <?php /* At a Glance Dashboard */ ?>
 <div class="row">
   <div class="columns">
-    <h3><?= $_GET["c"] ?></h3>
+    <h3><?php echo $_GET["c"] ?></h3>
   </div>
 </div>
 
