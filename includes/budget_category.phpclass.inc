@@ -94,9 +94,11 @@ class budget_category {
     $all_ledgers = ledger_item::get_all_ledger_items();
     
     //load each ledger into associated category
-    foreach ($all_ledgers as $ledger) {
-      $all_cats[$ledger->category]->amount_used += abs($ledger->value);
-    }
+	if ($all_ledgers !== false) {
+		foreach ($all_ledgers as $ledger) {
+		  $all_cats[$ledger->category]->amount_used += abs($ledger->value);
+		}
+	}
     
     return $all_cats;
   }

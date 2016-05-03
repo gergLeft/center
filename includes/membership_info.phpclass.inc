@@ -53,7 +53,7 @@ class membership_info {
       $query .= sprintf("username = '%s' AND ", $this->username);
       $query .= sprintf("password = '%s'", md5($this->password));
       $db->query($query);
-
+	  dump($db->Error);
       if ($db->next_record()) {
         $_SESSION["user_id"] = $db->f("user_id");
         

@@ -54,9 +54,9 @@ class db_sql {
 			default:
 			case 'center':
 				$this->host = "localhost";
-				$this->database = 'center_gergleft_com';
-				$this->user = 'gergLeft';
-				$this->password = 'TjCxsFXC';
+				$this->database = 'center_org';
+				$this->user = 'center';
+				$this->password = 'G&6j37dZQB4h$93x';
 				break;
 		}
 	}
