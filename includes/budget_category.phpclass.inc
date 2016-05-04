@@ -80,7 +80,6 @@ class budget_category {
     $query = "SELECT * FROM budget_categories";
     $query .= " ORDER BY name ASC";
     $db->query($query);
-    
     $cats = array();
     while ($db->next_record()) {
       $cat = new budget_category();
@@ -105,7 +104,7 @@ class budget_category {
     return $cats;
   }
   
-  public static function getAllCategoryStateForMonth($date) {
+  public static function getAllCategoryStateForMonth($date, $includePending = true) {
     $args = array(
         array(
           "field" => "date",
@@ -116,8 +115,18 @@ class budget_category {
           "field" => "date",
           "compare" => "<=",
           "value" => date("y-m-d 23:59:59", strtotime("last day of this month", strtotime($date)))
-        )
+        ),
     );
+    
+    if (!$includePending) {
+      $args[] = 
+        array(
+          "field" => "status",
+          "compare" => "=",
+          "value" => ledger_item::STATUS_CLEARED,  
+        );
+    }
+    
     return self::getAllCategoryState($args);
   }
   

@@ -25,12 +25,28 @@ and open the template in the editor.
   padding: 5px;
 }
 
+.pending-record {
+  border-style: dashed;
+}
+
 .row.ledger_day {
   border-top: 1px solid black;
   border-bottom: 1px solid black;
   padding: 5px 0px;
 }
-.row.ledger_day.alt {
+
+.row.project-record {
+  border-top: 1px solid black;
+  border-bottom: 1px solid black;
+  padding: 5px 0px;
+}
+
+.row.project-record select,
+.row.project-record .button {
+  margin-bottom: 0px;
+}
+
+.alt {
   background-color: lightgray;
 }
 .row.ledger_day .ledger_day_heading {
@@ -62,6 +78,7 @@ a.ledger_link {
 .progress {
   height: 30px;
 }
+
 .progress .used {
   padding: 5px 0px;
   height: 25px;
@@ -88,6 +105,7 @@ a.ledger_link {
 .progress .used.budget_over {
   background-color: #d13333 ;
   color: white;
+  max-width: 100%;
 }
 
 .ledger_category, a.ledger_category {

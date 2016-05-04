@@ -12,12 +12,9 @@
     'txtTime' => '',
     'cbxRecurring' => '',
     'ddlSchedule' => '',
-    'ddlSchedule_date_week' => '',
-    'ddlSchedule_date_month' => '',
-    'ddlSchedule_date_year' => '',
     'stopSchedule' => '',
     'stopSchedule_count_value' => '',
-    'stopSchedule_date_value' => ''
+    'stopSchedule_date_value' => '',
   );
   include '/functions.php';
 
@@ -47,28 +44,7 @@
       
       try {
         if ($_POST['cbxRecurring']) {
-          switch ($_POST['ddlSchedule']) {
-            default:
-            case ledger_item::SCHEDULE_DAILY:
-              $scheduleDate = "daily";
-              break;
-            case ledger_item::SCHEDULE_WEEKLY:
-            case ledger_item::SCHEDULE_BIWEEKLY:  
-              $scheduleDate = $_POST["ddlSchedule_date_week"];
-              break;
-            case ledger_item::SCHEDULE_SEMIMONTHLY:
-            case ledger_item::SCHEDULE_MONTHLY:
-              $scheduleDate = $_POST["ddlSchedule_date_month"];
-              break;
-            case ledger_item::SCHEDULE_QUARTERLY:
-            case ledger_item::SCHEDULE_SEMIANNUALLY:
-            case ledger_item::SCHEDULE_ANNUALLY:
-              $scheduleDate = $_POST["ddlSchedule_date_year"];
-              break;
-          }
-          
-          $ledger_item_set = $new_ledger_item->create_recurring_ledger_item($_POST['ddlSchedule'], $scheduleDate, $_POST["stopSchedule"], $_POST["stopSchedule_" . $_POST["stopSchedule"] . "_value"] );
-          dump($ledger_item_set);
+          $ledger_item_set = $new_ledger_item->create_recurring_ledger_item($_POST['ddlSchedule'], $_POST["stopSchedule"], $_POST["stopSchedule_" . $_POST["stopSchedule"] . "_value"]);
         } else {
           $new_ledger_item->create_ledger_item();
         }
@@ -100,8 +76,8 @@
     <div class="small-12 medium-6 small-centered columns">
       <label>Type: <?php echo REQUIRED_INDICATOR ?>
         <select id='ddlType' name='ddlType'>
-          <option value="<?php ledger_item::EXPENSE ?>"><?php ucwords(ledger_item::EXPENSE) ?></option>
-          <option value="<?php ledger_item::INCOME ?>"><?php ucwords(ledger_item::INCOME) ?></option>
+          <option value="<?php echo ledger_item::EXPENSE ?>" <?php if (ledger_item::EXPENSE == $form_display["ddlType"]) : ?>selected<?php endif; ?> ><?php echo ucwords(ledger_item::EXPENSE) ?></option>
+          <option value="<?php echo ledger_item::INCOME ?>" <?php if (ledger_item::INCOME == $form_display["ddlType"]) : ?>selected<?php endif; ?> ><?php echo ucwords(ledger_item::INCOME) ?></option>
         </select>
       </label>
     </div>
@@ -110,10 +86,10 @@
   <div class="row formRow required <?php echo $catName_err ?>">
     <div class="small-12 medium-6 small-centered columns">
       <label>Category: <?php echo REQUIRED_INDICATOR ?>
-        <?php echo $cats = budget_category::get_budget_categories(); ?>
+        <?php $cats = budget_category::get_budget_categories(); ?>
         <select id='ddlCategory' name='ddlCategory'>
           <?php foreach ($cats as $cat) : ?>
-              <option value="<?php echo $cat->id; ?>"><?php echo $cat->name; ?></option>
+              <option value="<?php echo $cat->id; ?>" <?php if ($cat->id == $form_display["ddlCategory"]) : ?>selected<?php endif; ?> ><?php echo $cat->name; ?></option>
           <?php endforeach; ?>
         </select>
       </label>
@@ -177,44 +153,25 @@
     <div class="small-12 medium-6 small-centered columns">
       <label>Recurring Schedule: <?php echo REQUIRED_INDICATOR ?>
         <select id='ddlSchedule' name='ddlSchedule'>
-          <option value="<?php ledger_item::SCHEDULE_DAILY ?>">Daily</option>
-          <option value="<?php ledger_item::SCHEDULE_WEEKLY ?>">Weekly</option>
-          <option value="<?php ledger_item::SCHEDULE_BIWEEKLY ?>">Bi-Weekly</option>
-          <option value="<?php ledger_item::SCHEDULE_SEMIMONTHLY ?>">Semi-Monthly</option>
-          <option value="<?php ledger_item::SCHEDULE_MONTHLY ?>">Monthly</option>
-          <option value="<?php ledger_item::SCHEDULE_QUARTERLY ?>">Quarterly</option>
-          <option value="<?php ledger_item::SCHEDULE_SEMIANNUALLY ?>">Semi-Annually</option>
-          <option value="<?php ledger_item::SCHEDULE_ANNUALLY ?>">Annually</option>
+          <option value="<?php echo ledger_item::SCHEDULE_DAILY ?>" <?php if (ledger_item::SCHEDULE_DAILY == $form_display["ddlSchedule"] || "" == $form_display["ddlSchedule"]) : ?>selected<?php endif; ?> >Daily</option>
+          <option value="<?php echo ledger_item::SCHEDULE_WEEKLY ?>" <?php if (ledger_item::SCHEDULE_WEEKLY == $form_display["ddlSchedule"]) : ?>selected<?php endif; ?>>Weekly</option>
+          <option value="<?php echo ledger_item::SCHEDULE_BIWEEKLY ?>" <?php if (ledger_item::SCHEDULE_BIWEEKLY == $form_display["ddlSchedule"]) : ?>selected<?php endif; ?>>Bi-Weekly</option>
+          <option value="<?php echo ledger_item::SCHEDULE_SEMIMONTHLY ?>" <?php if (ledger_item::SCHEDULE_SEMIMONTHLY == $form_display["ddlSchedule"]) : ?>selected<?php endif; ?>>Semi-Monthly</option>
+          <option value="<?php echo ledger_item::SCHEDULE_MONTHLY ?>" <?php if (ledger_item::SCHEDULE_MONTHLY == $form_display["ddlSchedule"]) : ?>selected<?php endif; ?>>Monthly</option>
+          <option value="<?php echo ledger_item::SCHEDULE_QUARTERLY ?>" <?php if (ledger_item::SCHEDULE_QUARTERLY == $form_display["ddlSchedule"]) : ?>selected<?php endif; ?>>Quarterly</option>
+          <option value="<?php echo ledger_item::SCHEDULE_SEMIANNUALLY ?>" <?php if (ledger_item::SCHEDULE_SEMIANNUALLY == $form_display["ddlSchedule"]) : ?>selected<?php endif; ?>>Semi-Annually</option>
+          <option value="<?php echo ledger_item::SCHEDULE_ANNUALLY ?>" <?php if (ledger_item::SCHEDULE_ANNUALLY == $form_display["ddlSchedule"]) : ?>selected<?php endif; ?>>Annually</option>
         </select>
       </label>
     </div>
-    <div class="small-12 medium-6 small-centered columns">
-      <label>Recurring Schedule Base: <?php echo REQUIRED_INDICATOR ?>
-        <span class="scheduleBaseVisibilityCtrl scheduleBaseVisibilityCtrl_day"><br />Every day</span>
-        <select id='ddlSchedule_date_week' name='ddlSchedule_date_week' class="scheduleBaseVisibilityCtrl scheduleBaseVisibilityCtrl_week  hideI" >
-          <option value="sunday">Sunday</option>
-          <option value="monday">Monday</option>
-          <option value="tuesday">Tuesday</option>
-          <option value="wednesday">Wednesday</option>
-          <option value="thursday">Thursday</option>
-          <option value="friday">Friday</option>
-          <option value="saturday">Saturday</option>
-        </select>
-        <select id='ddlSchedule_date_month' name='ddlSchedule_date_month' class="scheduleBaseVisibilityCtrl scheduleBaseVisibilityCtrl_month hideI" >
-          <?php for ($i=1; $i<=31; $i++) : ?>
-          <option value="<?php echo $i ?>"><?php echo $i <= 28 ? $i : $i . " (or last day of month)" ?></option>
-          <?php endfor; ?>
-        </select>
-        <input type="text" id="txtSchedule_date_year" name="txtSchedule_date_year" class="scheduleBaseVisibilityCtrl scheduleBaseVisibilityCtrl_year hideI foundation-date" />
-      </label>
-    </div>
+    
     <div class="small-12 medium-6 small-centered columns">
       <label>Stop on: </label>
       <div class="columns small-6 end stopSchedule_container stopSchedule_count_container active">
         <input type="radio" name="stopSchedule" value="count" id="stopSchedule_count" checked>
         <label for="stopSchedule_count">
           After 
-            <input type="text" id="stopSchedule_count_value"  name="stopSchedule_count_value" class=""/> 
+            <input type="text" id="stopSchedule_count_value"  name="stopSchedule_count_value" class="" value="<?php echo $form_display["stopSchedule_count_value"]; ?>" /> 
           Transactions
         </label>
       </div>
@@ -222,10 +179,11 @@
         <input type="radio" name="stopSchedule" value="date" id="stopSchedule_date">
         <label for="stopSchedule_date">
           Selected Date: 
-          <input type="text" id="stopSchedule_count_value"  name="stopSchedule_date_value" class="foundation-date" disabled />
+          <input type="text" id="stopSchedule_count_value" name="stopSchedule_date_value" class="foundation-date" disabled value="<?php echo $form_display["stopSchedule_date_value"]; ?>" />
         </label>
       </div>
     </div>
+    
   </div>
   
   <div class="row formRow">

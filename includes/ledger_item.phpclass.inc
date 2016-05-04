@@ -35,6 +35,7 @@ class ledger_item {
   }
   
   public function create_recurring_ledger_item($pattern, $stopType, $stopVal) {
+    
     //pattern = daily, weekly, bi-weekly, semi-monthly, monthly, quarterly, semi-annually, annually
     //stopType = date or count
     //stopVal = date to stop on, or count of transactions
@@ -49,19 +50,20 @@ class ledger_item {
     $base->value = $this->value;
     $base->date = $this->date;
     $base->time = $this->time;
-    $base->status = $this->status;
-    //$base->recurring_set_id = $base->create_ledger_item();
+    $base->status = self::STATUS_PENDING;
+    $base->recurring_set_id = $base->create_ledger_item();
     //TODO: update recurring_set_id on base transactions
     $transactions[] = $base;
     
     //find out how many transactions we need
     if ("count" === $stopType) {
+      
       $nextDate = $base->date;
       
-      for ($i=0; $i <=$stopVal; $i++) {
-        $nextTrans = $baseItem;
+      for ($i=0; $i < $stopVal-1; $i++) { //$stopVal-1 because we created index 0 above as the 1st transaction
+        $nextTrans = clone $base;
         $nextTrans->date = get_next_scheduled_day($nextDate, $pattern);
-        //$nextTrans->id = $nextTrans->create_ledger_item();
+        $nextTrans->id = $nextTrans->create_ledger_item();
         $transactions[] = $nextTrans;
         
         //increment the date so it'll advance
@@ -69,16 +71,18 @@ class ledger_item {
       }
     } else {
       //populate next date so it can be checked in the conditional
-      $nextDate = get_next_scheduled_day($startDate, $pattern);
+      $nextDate = get_next_scheduled_day($base->date, $pattern);
+      $i=0;
       
-      while (strtotime($nextDate) <= $strtotime($stopVal)) {
-        $nextTrans = $baseItem;
+      while (strtotime($nextDate) <= strtotime($stopVal)) {
+        //if ($i++>20) return;
+        $nextTrans = clone $base;
         $nextTrans->date = $nextDate; 
-        //$nextTrans->id = $nextTrans->create_ledger_item();
+        $nextTrans->id = $nextTrans->create_ledger_item();
         $transactions[] = $nextTrans;
         
         //populate next date so it can be checked in the conditional again
-        $nextDate = get_next_scheduled_day($startDate, $pattern);
+        $nextDate = get_next_scheduled_day($nextDate, $pattern);
       }
     }
     return $transactions;
@@ -98,7 +102,8 @@ class ledger_item {
     $db = new db_sql();
     $query = "INSERT INTO ledger_items SET ";
     $query .= sprintf("type = '%s', ", $this->type);
-    $query .= sprintf("value = '%s', ", abs($this->value));
+    $query .= sprintf("status = '%s', ", $this->status);
+    $query .= sprintf("value = '%s', ", preg_replace('/[^\d\.]/', '', $this->value));
     $query .= sprintf("category = %s, ", $this->category);
     $query .= sprintf("company = '%s', ", mysql_real_escape_string($this->company));
     $query .= sprintf("date = '%s' ", date('Y-m-d H:i:s', strtotime($this->date . " " . $this->time)));
@@ -113,18 +118,33 @@ class ledger_item {
     }
   }
   
+  public static function delete_ledger_item($id) {
+    //no possible duplicates found or ignored
+    $db = new db_sql();
+    $query = "DELETE FROM ledger_items WHERE ";
+    $query .= sprintf("id = '%s'", $id);
+    
+    $db->query($query);
+
+    if ($db->Error) {
+      throw new Exception($db->Error);
+    } else {
+      return true;
+    }
+  }
   
   public function update_ledger_item() {
     //no possible duplicates found or ignored
     $db = new db_sql();
     $query = "UPDATE ledger_items SET ";
+    $query .= sprintf("status = '%s', ", $this->status);
     $query .= sprintf("type = '%s', ", $this->type);
-    $query .= sprintf("value = '%s', ", abs($this->value));
+    $query .= sprintf("value = '%s', ", preg_replace('/[^\d\.]/', '', $this->value));
     $query .= sprintf("category = %s, ", $this->category);
     $query .= sprintf("company = '%s', ", mysql_real_escape_string($this->company));
     $query .= sprintf("date = '%s' ", date('Y-m-d H:i:s', strtotime($this->date . " " . $this->time)));
     $query .= sprintf(" WHERE id = '%s' ", $this->id);
-
+    
     $db->query($query);
 
     if ($db->Error) {
@@ -235,7 +255,6 @@ class ledger_item {
       }
     }
     $query .= " 1 = 1";
-    
     $db->query($query);
     
     $return_arr = array();
@@ -243,6 +262,7 @@ class ledger_item {
       $item = new ledger_item();
       $item->id = $db->f("id");
       $item->type = $db->f("type");
+      $item->status = $db->f("status");
       $item->company = $db->f("company");
       $item->category = $db->f("category");
       $item->value = $db->f("value");
@@ -256,6 +276,7 @@ class ledger_item {
     } else if (1 === sizeof($return_arr)) {
       $this->id = $return_arr[0]->id;
       $this->type = $return_arr[0]->type;
+      $this->status = $return_arr[0]->status;
       $this->category = $return_arr[0]->category;
       $this->company = $return_arr[0]->company;
       $this->date = $return_arr[0]->date;

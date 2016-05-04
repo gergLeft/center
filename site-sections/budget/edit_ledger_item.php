@@ -5,6 +5,7 @@
   $page_tag = 'budget-edit_ledger_item';
   $form_display = array(
     'ddlType' => '',
+    'ddlStatus' => '',
     'ddlCategory' => '',
     'txtCompany' => '',
     'txtValue' => '',
@@ -17,7 +18,9 @@
   //page postback actions
   $catName_err = $compName_err = $value_err = $date_err = "";
   if ( "POST" === $_SERVER['REQUEST_METHOD']) {
-    if (empty($_POST["txtCompany"]) ||
+    if (isset($_POST["btnDelete"])) {
+      ledger_item::delete_ledger_item($_GET["tid"]);
+    } else if (empty($_POST["txtCompany"]) ||
         empty($_POST["txtValue"])
     ) {
       if (empty($_POST["txtCompany"])) {
@@ -31,6 +34,7 @@
       }
     } else {
       $this_item->type = $_POST["ddlType"];
+      $this_item->status = $_POST["ddlStatus"];
       $this_item->category = $_POST["ddlCategory"];
       $this_item->company = $_POST["txtCompany"];
       $this_item->value = $_POST["txtValue"];
@@ -52,6 +56,7 @@
   } else {
     $form_display = array(
       'ddlType' => $this_item->type,
+      'ddlStatus' => $this_item->status,
       'ddlCategory' => $this_item->category,
       'txtCompany' => $this_item->company,
       'txtValue' => $this_item->value,
@@ -70,6 +75,17 @@
     </div>
   </div>
   <?php endif; ?>
+  
+  <div class="row formRow required <?php echo $catName_err ?>">
+    <div class="small-12 medium-6 small-centered columns">
+      <label>Status: <?php echo REQUIRED_INDICATOR ?>
+        <select id='ddlStatus' name='ddlStatus'>
+          <option value="<?php echo ledger_item::STATUS_CLEARED ?>" <?php if (ledger_item::STATUS_CLEARED == $form_display["ddlStatus"]) : ?>selected<?php endif; ?>><?php echo ucwords(ledger_item::STATUS_CLEARED) ?></option>
+          <option value="<?php echo ledger_item::STATUS_PENDING ?>" <?php if (ledger_item::STATUS_PENDING == $form_display["ddlStatus"]) : ?>selected<?php endif; ?>><?php echo ucwords(ledger_item::STATUS_PENDING) ?></option>
+        </select>
+      </label>
+    </div>
+  </div>
   
   <div class="row formRow required <?php echo $catName_err ?>">
     <div class="small-12 medium-6 small-centered columns">
@@ -141,11 +157,19 @@
   </div>
   
   <div class="row formRow">
-    <div class="small-12 medium-6 small-centered columns">
-      <ul class="button-group">
-        <li><a class="small button secondary" href="./">Cancel</a></li>
-        <li><input type="submit" class="small button" type="submit"></li>
-      </ul>      
+    <div class="small-6 small-centered columns">
+      <div class="row">
+        <div class="small-6 columns">
+          <ul class="button-group">
+            <li><a class="small button secondary" href="./">Cancel</a></li>
+            <li><input type="submit" class="small button" type="submit"></li>
+          </ul>     
+        </div>
+      
+        <div class="small-6 text-right columns">
+          <input type="submit" class="small button" type="submit" id="btnDelete" name="btnDelete" value="Delete">
+        </div>
+      </div>
     </div>
   </div>
 </form>

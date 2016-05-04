@@ -11,6 +11,7 @@ include 'includes/functions_helperFunctions.php';
 include 'includes/membership_info.phpclass.inc';
 include 'includes/budget_category.phpclass.inc';
 include 'includes/ledger_item.phpclass.inc';
+include 'includes/project.phpclass.inc';
 
 //process global event handlers
 include 'includes/functions_globalEventHandlers.php';

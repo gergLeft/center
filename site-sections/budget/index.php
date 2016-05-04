@@ -16,7 +16,7 @@
 
 <?php
   //TODO: slug category for test/display purposes
-  $category = budget_category::getAllCategoryStateForMonth(date("m/d/y"));
+  $category = budget_category::getAllCategoryStateForMonth(date("m/d/y"), false);
 ?>
 <?php foreach ($category as $cat) : ?>
   <div class="row">

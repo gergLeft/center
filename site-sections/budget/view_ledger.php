@@ -56,6 +56,7 @@
 
 <?php //iterate through days of month
   $alt = false;
+  $month_summary = 0;
   for ($d = strtotime($month_start); $d <= strtotime($month_end); $d = strtotime(date('m/d/y', $d) . ' +1 day')) : 
     $date = date('m/d/y', $d);
     //reset day transactions & find all transactions for that specific day
@@ -71,6 +72,7 @@
         }
       }
     }
+    $month_summary += $day_summary;
 ?>
 
 <div class="row ledger_day <?php if ($alt) { $alt = false; echo "alt"; } else { $alt = true; } ?>">
@@ -94,7 +96,7 @@
   <div class="columns small-12 large-8">
     <div class="row">
       <?php foreach ($day_transactions as $t) : ?>
-      <div class="columns small-12 medium-4 large-3 <?php echo ($t->type === ledger_item::EXPENSE) ? "expense-record" : "income-record"; ?>">
+      <div class="columns small-12 medium-4 large-3 <?php echo $t->type . "-record"; ?> <?php echo $t->status . "-record"; ?>">
         <a href="/site-sections/budget/edit_ledger_item.php?tid=<?php echo $t->id; ?>" class="ledger_link">
           <?php echo sprintf("$%01.2f", $t->value); ?> - 
         <?php echo $t->company; ?>
@@ -108,6 +110,20 @@
   </div>
 </div>
 <?php endfor; ?>
+
+<?php if ("" === $catFilter) : ?>
+<div class="row ledger_summary">
+  <div class="columns small-6 medium-2 large-1 ledger_day_heading">
+    <?php echo date('M Y', $d); ?>
+  </div>
+  <div class="columns small-6 medium-2 large-1 ledger_day_heading">&nbsp;</div>
+  <div class="columns small-6 large-1 ledger_day_heading end">
+    <?php 
+      echo sprintf("$%01.2f", $month_summary); 
+    ?>
+  </div>
+</div>
+<?php endif; ?>
 
 <div class="row">
   <div class="columns small-6">

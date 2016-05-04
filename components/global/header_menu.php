@@ -87,6 +87,21 @@
                   )
                 )
               );
+              
+              
+              $sections[] = array (
+                "title" => "Projects",
+                "actions" => array(
+                  array(
+                    "title" => "Project Dashboard",
+                    "url" => "/site-sections/projects/index.php"
+                  ),
+                  array(
+                    "title" => "Create Project",
+                    "url" => "/site-sections/projects/create_project.php"
+                  ),
+                )
+              );
             ?>
 	        <!-- Right Nav Section -->
 	        <ul class="middle">

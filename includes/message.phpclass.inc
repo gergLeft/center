@@ -15,6 +15,7 @@ class Message {
   const UNAUTHORIZED_USER = 'unauthorized_user';
   const DUPLICATE_CATEGORY = 'duplicate_category';
   const CATEGORY_CREATED = 'category_created';
+  const PROJECT_CREATED = 'project_created';
   
   public static function translate_code_to_message($err){
     switch($err) {
@@ -50,6 +51,9 @@ class Message {
         break;
       case self::LEDGER_ITEM_CREATED:
         return "Your ledger item has been saved";
+        break;
+      case self::PROJECT_CREATED:
+        return "Your project has been saved";
         break;
     }
   }

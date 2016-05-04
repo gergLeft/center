@@ -52,8 +52,6 @@ function get_next_scheduled_day($startDate, $pattern) {
         $date = strtotime("+15 days", $sdt);//monthly
       } else if ( 14 == $d || 15 == $d || 16 == $d) {
         $date = strtotime("+15 days", $sdt);//monthly
-        dump(date("m", $date));
-        dump($m);
         if (date("m", $date) !== $m) {
           $date = strtotime("last day of this month", $sdt);
         }
