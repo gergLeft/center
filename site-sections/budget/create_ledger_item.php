@@ -43,7 +43,7 @@
       //$new_ledger_item->time = $_POST["txtTime"];
       
       try {
-        if ($_POST['cbxRecurring']) {
+        if (isset($_POST['cbxRecurring'])) {
           $ledger_item_set = $new_ledger_item->create_recurring_ledger_item($_POST['ddlSchedule'], $_POST["stopSchedule"], $_POST["stopSchedule_" . $_POST["stopSchedule"] . "_value"]);
         } else {
           $new_ledger_item->create_ledger_item();

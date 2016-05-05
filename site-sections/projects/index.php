@@ -19,13 +19,10 @@
 ?>
 <div class="row project-record <?php if ($alt) echo "alt"; $alt = !$alt; ?>">
   <div class="columns small-3">
-    <?php echo $project->name; ?>
+    <a href="/site-sections/projects/edit_project.php?pid=<?php echo $project->id; ?>"><?php echo $project->name; ?></a>
   </div>
   <div class="columns small-1">
     <?php echo date("m/d/y", strtotime($project->dueDate)); ?>
-  </div>
-  <div class="columns small-1">
-    <?php echo ucwords($project->priority); ?>
   </div>
   <div class="columns small-4">
     <?php echo ucwords($project->description); ?>
@@ -33,16 +30,19 @@
   <div class="columns small-1">
     <?php echo $project->owner; ?>
   </div>
-  <div class="columns small-1">
+  <div class="columns small-2">
+    <?php echo ucwords($project->priority); ?>
+    <?php /*
     <select id='ddlPriority' name='ddlPriority' class="small">
-      <option value="<?php echo project::PRIORITY_LOW ?>" ><?php echo ucwords(project::PRIORITY_LOW) ?></option>
-      <option value="<?php echo project::PRIORITY_MEDIUM ?>" ><?php echo ucwords(project::PRIORITY_MEDIUM) ?></option>
-      <option value="<?php echo project::PRIORITY_HIGH ?>" ><?php echo ucwords(project::PRIORITY_HIGH) ?></option>
-      <option value="<?php echo project::PRIORITY_CRITICAL ?>" ><?php echo ucwords(project::PRIORITY_CRITICAL) ?></option>
+      <option value="<?php echo project::PRIORITY_LOW ?>" <?php if (project::PRIORITY_LOW == $project->priority) : ?>selected<?php endif; ?>><?php echo ucwords(project::PRIORITY_LOW) ?></option>
+      <option value="<?php echo project::PRIORITY_MEDIUM ?>" <?php if (project::PRIORITY_MEDIUM == $project->priority) : ?>selected<?php endif; ?> ><?php echo ucwords(project::PRIORITY_MEDIUM) ?></option>
+      <option value="<?php echo project::PRIORITY_HIGH ?>" <?php if (project::PRIORITY_HIGH == $project->priority) : ?>selected<?php endif; ?> ><?php echo ucwords(project::PRIORITY_HIGH) ?></option>
+      <option value="<?php echo project::PRIORITY_CRITICAL ?>" <?php if (project::PRIORITY_CRITICAL == $project->priority) : ?>selected<?php endif; ?> ><?php echo ucwords(project::PRIORITY_CRITICAL) ?></option>
     </select>
+     */?>
   </div>
   <div class="columns small-1">
-    <a class="secondary tiny button">Close</a>
+    &nbsp;<?php /*<a class="secondary tiny button">Close</a>*/ ?>
   </div>
 </div>
 <?php endforeach; ?>

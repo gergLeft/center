@@ -15,14 +15,44 @@ class project {
   public $priority = self::PRIORITY_MEDIUM;
   public $owner = "";
     
-  function __construct() {
-    $this->dueDate = date("Y-m-d 00:00:00");
+  function __construct($id = null) {
+    if (is_null($id)) {
+      $this->dueDate = date("Y-m-d 00:00:00");
+    } else {
+      $this->get_project($id);
+    }
+  }
+  
+  private function get_project($id) {
+    $db = new db_sql();
+    $query = "SELECT * FROM projects";
+    $query .= sprintf(" WHERE id = %s", $id);
+    $db->query($query);
+    $projects = array();
+    if ($db->next_record()) {
+      $this->id = $db->f("id");
+      $this->name = $db->f("name");
+      $this->dueDate = $db->f("dueDate");
+      $this->description = $db->f("description");
+      $this->priority = $db->f("priority");
+      $this->owner = $db->f("owner");
+      return true;
+    } else {
+      return false;
+    }
   }
   
   public static function get_projects() {
     $db = new db_sql();
-    $query = "SELECT * FROM projects";
-    $query .= " ORDER BY name ASC";
+    $query = "SELECT *, "
+            . "case priority
+                  when '". self::PRIORITY_CRITICAL . "' then 1
+                  when '". self::PRIORITY_HIGH . "' then 2
+                  when '". self::PRIORITY_MEDIUM . "' then 3
+                  when '". self::PRIORITY_LOW . "' then 4
+              end as priorityNum "
+            ." FROM projects";
+    $query .= " ORDER BY priorityNum ASC, dueDate ASC, name ASC";
     $db->query($query);
     $projects = array();
     while ($db->next_record()) {
@@ -58,12 +88,12 @@ class project {
     }
   }
   
-  private function update_project() {
+  public function update_project() {
     //if not, create authorized_users record
     $db = new db_sql();
     $query = "UPDATE projects SET ";
     $query .= sprintf("name = '%s', ", $this->name);
-    $query .= sprintf("dueDate = '%s', ", $this->dueDate);
+    $query .= sprintf("dueDate = '%s', ", date("Y-m-d 00:00:00", strtotime($this->dueDate)));
     $query .= sprintf("description = '%s', ", $this->description);
     $query .= sprintf("priority = '%s', ", $this->priority);
     $query .= sprintf("owner = '%s' ", $this->owner);
@@ -75,6 +105,20 @@ class project {
       throw new Exception($db->Error);
     } else {
       $this->id = $db->last_id();
+      return true;
+    }
+  }
+  
+  public static function delete_project($id) {
+    //if not, create authorized_users record
+    $db = new db_sql();
+    $query = "DELETE FROM projects ";
+    $query .= sprintf(" WHERE id = %s ", $id);
+    $db->query($query);
+
+    if ($db->Error) {
+      throw new Exception($db->Error);
+    } else {
       return true;
     }
   }

@@ -98,15 +98,17 @@ class ledger_item {
       }
     }
     
+    $transTime = strtotime($this->date . " " . $this->time);
+    
     //no possible duplicates found or ignored
     $db = new db_sql();
     $query = "INSERT INTO ledger_items SET ";
     $query .= sprintf("type = '%s', ", $this->type);
-    $query .= sprintf("status = '%s', ", $this->status);
+    $query .= sprintf("status = '%s', ", $transTime > strtotime(date("Y-m-d 00:00:00")) ? self::STATUS_PENDING : self::STATUS_CLEARED);
     $query .= sprintf("value = '%s', ", preg_replace('/[^\d\.]/', '', $this->value));
     $query .= sprintf("category = %s, ", $this->category);
     $query .= sprintf("company = '%s', ", mysql_real_escape_string($this->company));
-    $query .= sprintf("date = '%s' ", date('Y-m-d H:i:s', strtotime($this->date . " " . $this->time)));
+    $query .= sprintf("date = '%s' ", date('Y-m-d H:i:s', $transTime));
 
     $db->query($query);
 
