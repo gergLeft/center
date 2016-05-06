@@ -99,4 +99,8 @@ function dump($object) {
   var_dump($object);
   echo "</pre>";
 } 
+
+function sanitizeNumber($obj) {
+  return preg_replace('/[^\d\.]/', '', $obj);
+}
 ?>

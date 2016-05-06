@@ -8,6 +8,7 @@
     'ddlStatus' => '',
     'ddlCategory' => '',
     'txtCompany' => '',
+    'txtNote' => '',
     'txtValue' => '',
     'txtDate' => '',
     'txtTime' => '',
@@ -37,6 +38,7 @@
       $this_item->status = $_POST["ddlStatus"];
       $this_item->category = $_POST["ddlCategory"];
       $this_item->company = $_POST["txtCompany"];
+      $this_item->note = $_POST["txtNote"];
       $this_item->value = $_POST["txtValue"];
       $this_item->date = $_POST["txtDate"];
       
@@ -59,6 +61,7 @@
       'ddlStatus' => $this_item->status,
       'ddlCategory' => $this_item->category,
       'txtCompany' => $this_item->company,
+      'txtNote' => $this_item->note,
       'txtValue' => $this_item->value,
       'txtDate' => $this_item->date,
       'txtTime' => $this_item->time,
@@ -154,6 +157,14 @@
       <input id="txtTime" name="txtTime" type="text" MaxLength="50" value="<?php echo $form_display["txtTime"] ?>" placeholder="00:00 am/pm" class="foundation-time"/>
       </label>
     </div>*/ ?>
+  </div>
+  
+  <div class="row formRow">
+    <div class="small-12 medium-6 small-centered columns">
+      <label>Note:
+        <textarea id="txtNote" name="txtNote"><?php echo $form_display["txtNote"] ?></textarea>
+      </label>
+    </div>
   </div>
   
   <div class="row formRow">

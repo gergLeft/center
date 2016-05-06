@@ -96,7 +96,7 @@
   <div class="columns small-12 large-8">
     <div class="row">
       <?php foreach ($day_transactions as $t) : ?>
-      <div class="columns small-12 medium-4 large-3 <?php echo $t->type . "-record"; ?> <?php echo $t->status . "-record"; ?>">
+      <div class="columns small-12 medium-4 large-3 <?php echo $t->type . "-record"; ?> <?php echo $t->status . "-record"; ?>" title="<?php echo $t->note; ?>">
         <a href="/site-sections/budget/edit_ledger_item.php?tid=<?php echo $t->id; ?>" class="ledger_link">
           <?php echo sprintf("$%01.2f", $t->value); ?> - 
         <?php echo $t->company; ?>

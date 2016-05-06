@@ -22,6 +22,7 @@ class ledger_item {
   public $type = self::EXPENSE;
   public $category = 0;
   public $company = "";
+  public $note = "";
   public $value = 0.00;
   public $date;
   public $time = "00:00:00";
@@ -47,6 +48,7 @@ class ledger_item {
     $base->type = $this->type;
     $base->category = $this->category;
     $base->company = $this->company;
+    $base->note = $this->note;
     $base->value = $this->value;
     $base->date = $this->date;
     $base->time = $this->time;
@@ -105,11 +107,11 @@ class ledger_item {
     $query = "INSERT INTO ledger_items SET ";
     $query .= sprintf("type = '%s', ", $this->type);
     $query .= sprintf("status = '%s', ", $transTime > strtotime(date("Y-m-d 00:00:00")) ? self::STATUS_PENDING : self::STATUS_CLEARED);
-    $query .= sprintf("value = '%s', ", preg_replace('/[^\d\.]/', '', $this->value));
+    $query .= sprintf("value = '%s', ", sanitizeNumber($this->value));
     $query .= sprintf("category = %s, ", $this->category);
     $query .= sprintf("company = '%s', ", mysql_real_escape_string($this->company));
+    $query .= sprintf("note = '%s', ", mysql_real_escape_string($this->note));
     $query .= sprintf("date = '%s' ", date('Y-m-d H:i:s', $transTime));
-
     $db->query($query);
 
     if ($db->Error) {
@@ -144,9 +146,9 @@ class ledger_item {
     $query .= sprintf("value = '%s', ", preg_replace('/[^\d\.]/', '', $this->value));
     $query .= sprintf("category = %s, ", $this->category);
     $query .= sprintf("company = '%s', ", mysql_real_escape_string($this->company));
+    $query .= sprintf("note = '%s', ", mysql_real_escape_string($this->note));
     $query .= sprintf("date = '%s' ", date('Y-m-d H:i:s', strtotime($this->date . " " . $this->time)));
     $query .= sprintf(" WHERE id = '%s' ", $this->id);
-    
     $db->query($query);
 
     if ($db->Error) {
@@ -212,27 +214,28 @@ class ledger_item {
     }
   }
   
-  public function has_possible_duplicate($li) {
-    $l = new ledger_item();
+  public function has_possible_duplicate(&$li) {
     $args = array(
       array(
         "field" => "type", 
         "value" => $li->type
       ),
       array(
-        "field" => "company", 
-        "value" => $li->company
-      ),
-      array(
         "field" => "value", 
-        "value" => abs($li->value)
+        "value" => sanitizeNumber($li->value)
       ),
       array(
         "field" => "date", 
-        "value" => date('Y-m-d H:i:s', strtotime($li->date . " " . $li->time)) 
+          "compare" => ">=",
+        "value" => date('Y-m-d H:i:s', strtotime("-2 days", strtotime($li->date . " " . $li->time)))
+      ),
+      array(
+        "field" => "date", 
+          "compare" => "<=",
+        "value" => date('Y-m-d H:i:s', strtotime("+2 days", strtotime($li->date . " " . $li->time)))
       ),
     );
-    return $l->getLedgerBy_criteria($args);
+    return $li->getLedgerBy_criteria($args);
   }
   
   private function getLedgerBy_criteria($arr = array()) {
@@ -266,6 +269,7 @@ class ledger_item {
       $item->type = $db->f("type");
       $item->status = $db->f("status");
       $item->company = $db->f("company");
+      $item->note = $db->f("note");
       $item->category = $db->f("category");
       $item->value = $db->f("value");
       $item->date = date('m/d/y', strtotime($db->f("date")));
@@ -281,10 +285,10 @@ class ledger_item {
       $this->status = $return_arr[0]->status;
       $this->category = $return_arr[0]->category;
       $this->company = $return_arr[0]->company;
+      $this->note = $return_arr[0]->note;
       $this->date = $return_arr[0]->date;
       $this->time = $return_arr[0]->time;
       $this->value = $return_arr[0]->value;
-      
       return true;
     } else {
       return $return_arr;

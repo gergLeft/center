@@ -7,6 +7,7 @@
     'ddlType' => '',
     'ddlCategory' => '',
     'txtCompany' => '',
+    'txtNote' => '',
     'txtValue' => '',
     'txtDate' => '',
     'txtTime' => '',
@@ -38,6 +39,7 @@
       $new_ledger_item->type = $_POST["ddlType"];
       $new_ledger_item->category = $_POST["ddlCategory"];
       $new_ledger_item->company = $_POST["txtCompany"];
+      $new_ledger_item->note = $_POST["txtNote"];
       $new_ledger_item->value = $_POST["txtValue"];
       $new_ledger_item->date = $_POST["txtDate"];
       //$new_ledger_item->time = $_POST["txtTime"];
@@ -139,6 +141,14 @@
       <input id="txtTime" name="txtTime" type="text" MaxLength="50" value="<?php echo $form_display["txtTime"] ?>" placeholder="00:00 am/pm" class="foundation-time"/>
       </label>
     </div>*/ ?>
+  </div>
+  
+  <div class="row formRow">
+    <div class="small-12 medium-6 small-centered columns">
+      <label>Note:
+        <textarea id="txtNote" name="txtNote"><?php echo $form_display["txtNote"] ?></textarea>
+      </label>
+    </div>
   </div>
   
   <div class="row formRow">

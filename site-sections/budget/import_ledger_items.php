@@ -1,5 +1,4 @@
 <?php
-
   set_include_path($_SERVER["DOCUMENT_ROOT"]);
   $page_title = 'Budget : Import Ledger Items';
   $page_tag = 'budget-import_ledger_items';
@@ -19,6 +18,11 @@
         $new_ledger_item->time = $_POST["dup_trans_time-".$keyInt];
         $new_ledger_item->type = $_POST["dup_trans_type-".$keyInt];
         $new_ledger_item->create_ledger_item();
+      } else if (0 === strpos($key, "dup_trans_key-") && "resolve-pending" === $post_field_value ) {
+        $keyInt = substr($key, strlen("dup_trans_key-"));
+        $new_ledger_item = new ledger_item($_POST["dup_trans_id-".$keyInt]);
+        $new_ledger_item->status = ledger_item::STATUS_CLEARED;
+        $new_ledger_item->update_ledger_item();
       }
     }
     $runImport = false;
@@ -31,7 +35,7 @@
   $import = file_get_contents("./import_ledger_uploads/" . $_REQUEST["f"]); 
   $import_csv_rows = str_getcsv($import, "\n");
   $success = $fail = 0;
-  $duplicates = $error_log = array();
+  $resolvedPending = $duplicates = $error_log = array();
   $firstColHeaders = true;
   for ($i=0; $i<=sizeof($import_csv_rows); $i++) {
     if (empty($import_csv_rows[$i])) {
@@ -59,12 +63,17 @@
     
     if ( "beginning balance" !== strtolower($new_ledger_item->company)) {
       try {
-        $thisTrans = $new_ledger_item;
-        $res = $new_ledger_item->create_ledger_item(true);
+        $dups = clone $new_ledger_item;
+        $res = $dups->create_ledger_item(true);
+        
         if (true === $res) {
           $success++;
         } else {
-          $duplicates[] = array("new"=>$thisTrans, "possible_duplicates"=>$res);
+          if (ledger_item::STATUS_PENDING === $dups->status) {
+            $resolvedPending[] = array("new"=>$new_ledger_item, "possible_duplicates"=>$dups);
+          } else {
+            $duplicates[] = array("new"=>$new_ledger_item, "possible_duplicates"=>$dups);
+          }
         }
       } catch(Exception $ex) {
         $fail++;
@@ -77,25 +86,27 @@
 Records: <?php echo sizeof($import_csv_rows); ?><br />
 Successes: <?php echo $success; ?><br />
 Failures: <?php echo $fail; ?><br />
-Duplicates: <?php echo sizeof($duplicates); ?>
+Duplicates: <?php echo sizeof($duplicates); ?><br />
+Pending: <?php echo sizeof($resolvedPending); ?>
 <?php if ($fail > 0) : ?>
 Log: <?php dump($error_log);?>
 <?php endif; ?>
 
-<?php if (sizeof($duplicates) > 0 ) : ?>
+<?php if (sizeof($resolvedPending) > 0 ) : ?>
 <hr />
-<h5>Resolve Duplications</h5>
+<h5>Resolve Pending</h5>
 <form class="custom" method="POST">
-<?php echo $d=0;foreach($duplicates as $dup) : $d++; ?>
+<?php $d=0;foreach($resolvedPending as $dup) : $d++; ?>
 <div class="row">
   <div class="columns large-1">
     <select name="dup_trans_key-<?php echo $d ?>" id="dup_trans_key-<?php echo $d ?>">
       <option value=""> - </option>
-      <option value="create">Approve</option>
-      <option value="skip">Deny</option>
+      <option value="resolve-pending" >Clear Pending</option>
+      <option value="create">Create New</option>
+      <option value="skip">Ignore</option>
     </select>
   </div>
-  <?php echo $new = true; foreach ($dup as $trans) : ?>
+  <?php $new = true; foreach ($dup as $trans) : ?>
   
   <div class="columns large-5 <?php echo $new ? "import-trans" : "duplicate-trans"; ?>" >
     
@@ -108,6 +119,10 @@ Log: <?php dump($error_log);?>
     <input type="hidden" name="dup_trans_time-<?php echo $d ?>" id="dup_trans_time-<?php echo $d ?>" value="<?php echo $trans->time ?>" />
     <?php 
         $new = false;
+      else :
+    ?>
+    <input type="hidden" name="dup_trans_id-<?php echo $d ?>" id="dup_trans_id-<?php echo $d ?>" value="<?php echo $trans->id ?>" />
+    <?php 
       endif; 
     ?>
     
@@ -122,7 +137,7 @@ Log: <?php dump($error_log);?>
         Company: <?php echo $trans->company; ?>
       </div>
       <div class="columns small-2">
-        Value: <?php echo sprintf("$%01.2f", $trans->value); ?>
+        Value: <?php echo sprintf("$%01.2f", sanitizeNumber($trans->value)); ?>
       </div>
       <div class="columns small-2">
         Date: <?php echo $trans->date . " " . $trans->time; ?>
